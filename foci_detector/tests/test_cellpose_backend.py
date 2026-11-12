@@ -1,5 +1,7 @@
 ﻿import json
+import os
 from pathlib import Path
+import sys
 from tempfile import TemporaryDirectory
 from threading import Event, Thread
 import time
@@ -22,6 +24,20 @@ from src.utils import save_counts_csv
 
 
 class CellposeBackendTests(unittest.TestCase):
+    def test_packaged_helper_path_matches_platform_layout(self):
+        with patch.object(sys, 'frozen', True, create=True), \
+             patch.dict(os.environ, {}, clear=True), \
+             patch.object(sys, 'platform', 'darwin'), \
+             patch.object(sys, 'executable', '/Applications/DNA_Foci_Detector.app/Contents/MacOS/DNA_Foci_Detector'):
+            session = SegmentationSession()
+            try:
+                self.assertEqual(
+                    session.python.parts[-4:],
+                    ('Contents', 'Resources', 'segmentation', 'CellposeWorker'),
+                )
+            finally:
+                session.close()
+
     def test_grid_caps_xy_and_preserves_physical_anisotropy(self):
         image = np.random.default_rng(3).uniform(size=(4, 600, 800)).astype(np.float32)
         grid, spacing = prepare_grid(image, (.4, .1, .1))

@@ -1,0 +1,6 @@
+cellpose==3.1.1.1
+numpy==1.26.4
+scipy==1.13.1
+opencv-python-headless==4.10.0.84
+psutil==7.0.0
+torch==2.5.1

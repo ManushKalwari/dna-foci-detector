@@ -57,10 +57,15 @@ class SegmentationSettings:
 class SegmentationSession:
     """One helper per batch. This object is owned by the detection thread."""
     def __init__(self, python=None):
-        default = Path(__file__).resolve().parents[2] / '.segmentation_env' / 'Scripts' / 'python.exe'
+        environment = Path(__file__).resolve().parents[2] / '.segmentation_env'
+        default = environment / ('Scripts/python.exe' if os.name == 'nt' else 'bin/python')
         self.packaged = bool(getattr(sys, 'frozen', False)) and python is None and not os.environ.get('DNA_FOCI_SEGMENTATION_PYTHON')
         if self.packaged:
-            default = Path(sys.executable).resolve().parent / 'segmentation' / 'CellposeWorker.exe'
+            executable = Path(sys.executable).resolve()
+            if sys.platform == 'darwin':
+                default = executable.parents[1] / 'Resources' / 'segmentation' / 'CellposeWorker'
+            else:
+                default = executable.parent / 'segmentation' / 'CellposeWorker.exe'
         self.python = Path(python or os.environ.get('DNA_FOCI_SEGMENTATION_PYTHON', default))
         self.process = None
         self.directory = TemporaryDirectory(prefix='dna_foci_cellpose_')
@@ -71,7 +76,7 @@ class SegmentationSession:
         if not self.python.is_file():
             if self.packaged:
                 raise RuntimeError('Cellpose runtime is missing. Extract the complete application folder, including segmentation.')
-            raise RuntimeError('Cellpose environment is missing. Run setup_segmentation.ps1 before starting detection.')
+            raise RuntimeError('Cellpose environment is missing. Run the segmentation setup before starting detection.')
         if not Path(self.directory.name).exists():
             self.directory = TemporaryDirectory(prefix='dna_foci_cellpose_')
             self.responses = Queue()

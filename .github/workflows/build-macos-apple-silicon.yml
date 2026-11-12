@@ -1,0 +1,35 @@
+name: Build macOS Apple Silicon
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-15-arm64
+    timeout-minutes: 120
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          architecture: arm64
+
+      - name: Build and verify application
+        run: bash foci_detector/macos/build_macos.sh
+
+      - name: Upload application
+        uses: actions/upload-artifact@v4
+        with:
+          name: DNA_Foci_Detector_macOS_AppleSilicon
+          path: |
+            foci_detector/dist/macos/DNA_Foci_Detector_macOS_AppleSilicon.zip
+            foci_detector/dist/macos/DNA_Foci_Detector_macOS_AppleSilicon.zip.sha256
+            foci_detector/dist/macos/READ_ME_FIRST.txt
+          if-no-files-found: error
+          retention-days: 30

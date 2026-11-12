@@ -84,3 +84,13 @@ any watershed result marked `review` or `failed` before analysis.
 ```powershell
 .\.venv\Scripts\python.exe -B -m unittest discover -s .\foci_detector\tests -v
 ```
+
+## macOS Apple Silicon build
+
+The `Build macOS Apple Silicon` GitHub Actions workflow creates an ad-hoc signed,
+self-contained application for Apple Silicon Macs. The artifact includes the
+Napari viewer, CPU Cellpose runtime, and both supported Cellpose models. Python
+is not required on the destination Mac.
+
+The build is not notarized. Follow `READ_ME_FIRST.txt` in the artifact for the
+first launch.
