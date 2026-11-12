@@ -1,0 +1,32 @@
+# Local environments
+/clean_env/
+/.venv/
+/.segmentation_env/
+
+# Microscopy data and analysis output
+/data/
+*.czi
+*.lsm
+*.csv
+*.xlsx
+
+# Generated Python and test files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.log
+.coverage
+htmlcov/
+
+# Generated builds and local development tools
+/foci_detector/build/
+/foci_detector/dist/
+/foci_detector/packaging/
+/foci_detector/segmentation_evaluation*/
+/foci_detector/evaluate_segmentation.py
+/foci_detector/SEGMENTATION.md
+/docs/
+
+# Local editor settings
+/.vscode/
+.idea/
