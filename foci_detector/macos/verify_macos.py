@@ -34,8 +34,14 @@ def main():
         raise RuntimeError(f'Cellpose model check failed: {check.stdout}\n{check.stderr}')
 
     environment = os.environ.copy()
-    environment['QT_QPA_PLATFORM'] = 'offscreen'
-    run([str(main_executable), '--check-runtime'], env=environment, timeout=180)
+    environment['QT_QPA_PLATFORM'] = 'minimal'
+    try:
+        run([str(main_executable), '--check-runtime'], env=environment, timeout=180)
+    except Exception:
+        log = Path.home() / 'Library' / 'Logs' / 'DNA_Foci_Detector' / 'application.log'
+        if log.is_file():
+            print(log.read_text(encoding='utf-8', errors='replace'), file=sys.stderr)
+        raise
     run(['codesign', '--verify', '--deep', '--strict', '--verbose=2', str(bundle)])
     print('Apple Silicon viewer startup and both Cellpose model checks passed.')
 

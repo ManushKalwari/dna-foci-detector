@@ -18,7 +18,7 @@ if __name__ == '__main__':
     print('\nStarting DNA Foci Detector', flush=True)
     check_runtime = '--check-runtime' in sys.argv
     if check_runtime:
-        os.environ['QT_QPA_PLATFORM'] = 'offscreen'
+        os.environ.setdefault('QT_QPA_PLATFORM', 'minimal')
     import app
     if check_runtime:
         print('Viewer imports and sidebar initialized successfully.', flush=True)
