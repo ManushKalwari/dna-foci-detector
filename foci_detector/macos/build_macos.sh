@@ -46,6 +46,7 @@ printf '%s\n' \
     --specpath "$BUILD_DIR" \
     --paths "$APP_DIR" \
     --collect-all napari --collect-all vispy --collect-all napari_builtins \
+    --collect-all napari_svg --collect-all napari_console \
     --collect-all aicspylibczi --collect-all imagecodecs --collect-all magicgui \
     --recursive-copy-metadata napari \
     --exclude-module torch --exclude-module cellpose \

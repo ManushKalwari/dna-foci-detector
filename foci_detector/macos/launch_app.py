@@ -19,9 +19,9 @@ if __name__ == '__main__':
     check_runtime = '--check-runtime' in sys.argv
     if check_runtime:
         os.environ.setdefault('QT_QPA_PLATFORM', 'minimal')
-    import app
-    if check_runtime:
-        print('Viewer imports and sidebar initialized successfully.', flush=True)
-        app.viewer.close()
+        from runtime_check import check_runtime as run_runtime_check
+        run_runtime_check()
+        print('Frozen runtime initialized successfully.', flush=True)
     else:
+        import app
         app.main()
